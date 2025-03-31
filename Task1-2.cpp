@@ -4,26 +4,26 @@
 
 using namespace std;
 
-pair<bool, int> Brute_match(string patt, string data) {
+pair<bool, int> Brute_match(string pattern, string inputString) {
     pair<bool, int> result;
     result.first = false;
     result.second = -1;
 
-    if(patt.length() > data.length()){
+    if(pattern.length() > inputString.length()){
         return result;
     }
 
-    for (int i = 0; i <= data.length() - patt.length(); i++) {  // Limit i to data.length() - patt.length()
+    for (int i = 0; i <= inputString.length() - pattern.length(); i++) {  // Limit i to inputString.length() - pattern.length()
         bool same = true;
-        for (int j = 0; j < patt.length(); j++) {  // Loop through the pattern length
-            if (patt[j] != data[i + j]) {  // Compare the substring of data with the pattern
+        for (int j = 0; j < pattern.length(); j++) {  // Loop through the patternern length
+            if (pattern[j] != inputString[i + j]) {  // Compare the substring of inputString with the patternern
                 same = false;
                 break;  // No need to continue once a mismatch is found
             }
         }
         if (same) {
             result.first = same;
-            result.second = i + patt.length() - 1;
+            result.second = i + pattern.length() - 1;
             return result;  // Found a match
         }
     }
@@ -32,100 +32,101 @@ pair<bool, int> Brute_match(string patt, string data) {
 
 
 //shift by the smallest possible amount
-pair<bool, int> Sunday_match(string patt, string data) {
+pair<bool, int> Sunday_match(string pattern, string inputString) {
     pair<bool, int> result;
     result.first = false;
     result.second = -1;
 
-    int patt_length = patt.size();
-    int data_length = data.size();
+    int pattern_length = pattern.size();
+    int data_length = inputString.size();
 
-    if (patt_length == 0) return result;
+    if (pattern_length == 0) return result;
 
-    vector<int> shift_table(256, patt_length);
+    vector<int> shift_table(256, pattern_length);
 
-    for (int i = 0; i < patt_length; ++i) {
-        shift_table[patt[i]] = patt_length - i;
+    for (int i = 0; i < pattern_length; i++) {
+        shift_table[pattern[i]] = pattern_length - i;
     }
 
     int i = 0;
-    while (i <= data_length - patt_length) {
+    while (i <= data_length - pattern_length) {
         // Check for match
-        if (data.substr(i, patt_length) == patt) {
+        if (inputString.substr(i, pattern_length) == pattern) {
             //cout<<"match at i=="<<i<<endl;
             result.first = true;
-            result.second = i + patt_length - 1;
+            result.second = i + pattern_length - 1;
             return result;
         }
 
-        // Shift based on next character in patt
-        int next_index = i + patt_length;
-        int shift = shift_table[data[next_index]];
+        // Shift based on next character in pattern
+        int next_index = i + pattern_length;
+        int shift = shift_table[inputString[next_index]];
 
         i += shift;
     }
+
     return result; // No match found
 }
 
-
-queue<string> DivideString(string pattern){
+//A function that divides lines into those that do not contain wildcards
+queue<string> DivideString(string patternern){
     queue<string> strings;
 
-    int patternL = pattern.length();
-    string currentPattern = pattern;
-    for(int i = 0; i < patternL; i++){
-        if(pattern[i] == '*'){
+    int patternernL = patternern.length();
+    string currentpatternern = patternern;
+    for(int i = 0; i < patternernL; i++){
+        if(patternern[i] == '*'){
             if(i == 0){
-                currentPattern = pattern.substr(1, patternL - 1);
+                currentpatternern = patternern.substr(1, patternernL - 1);
 
                 continue;
             }
             
-            if(i + 1 == patternL){
-                strings.push(currentPattern.substr(0, currentPattern.length() - 1));
+            if(i + 1 == patternernL){
+                strings.push(currentpatternern.substr(0, currentpatternern.length() - 1));
 
                 continue;
             }
 
-            if(i > 0 && pattern[i - 1] == '\\'){
+            if(i > 0 && patternern[i - 1] == '\\'){
                 continue;
             }
             
-            strings.push(pattern.substr(patternL - currentPattern.length(), i - (patternL - currentPattern.length())));
-            currentPattern = pattern.substr(i + 1, patternL - (i + 1));
+            strings.push(patternern.substr(patternernL - currentpatternern.length(), i - (patternernL - currentpatternern.length())));
+            currentpatternern = patternern.substr(i + 1, patternernL - (i + 1));
 
             continue;
-        } else if(pattern[i] == '?'){
+        } else if(patternern[i] == '?'){
                 if(i == 0){
                     strings.push("?");
                     
-                    currentPattern = pattern.substr(1, patternL - 1);
+                    currentpatternern = patternern.substr(1, patternernL - 1);
     
                     continue;
                 }
                 
-                if(i + 1 == patternL){
-                    strings.push(currentPattern.substr(0, currentPattern.length() - 1));
+                if(i + 1 == patternernL){
+                    strings.push(currentpatternern.substr(0, currentpatternern.length() - 1));
                     
                     strings.push("?");
     
                     continue;
                 }
     
-                if(i > 0 && pattern[i - 1] == '\\'){
+                if(i > 0 && patternern[i - 1] == '\\'){
                     continue;
                 }
                 
-                strings.push(pattern.substr(patternL - currentPattern.length(), i - (patternL - currentPattern.length())));
+                strings.push(patternern.substr(patternernL - currentpatternern.length(), i - (patternernL - currentpatternern.length())));
                 
                 strings.push("?");
     
-                currentPattern = pattern.substr(i + 1, patternL - (i + 1));
+                currentpatternern = patternern.substr(i + 1, patternernL - (i + 1));
     
                 continue;
         }else   {
-            if(i == patternL - 1){
-                strings.push(currentPattern);
+            if(i == patternernL - 1){
+                strings.push(currentpatternern);
             }
         }
     }
@@ -138,7 +139,7 @@ queue<string> DivideString(string pattern){
         for(int i = 0; i <= s.length(); i++){
             if(s[i] == '\\' && i + 1 != s.length() && ( s[i + 1] == '*' || s[i + 1] == '?')){
                 finalString += s.substr(s.length() - currentString.length(), i - (s.length() - currentString.length()));
-                currentString = s.substr(i + 1, patternL - (i + 1));
+                currentString = s.substr(i + 1, patternernL - (i + 1));
             }
         }
 
@@ -150,6 +151,7 @@ queue<string> DivideString(string pattern){
     return finalStrings;
 }
 
+//Function that implement our algorithms on the divided strings
 pair<bool, int> Implement(string s, queue<string> dividedStrings, int option = 1){
     pair<bool, int> lastResult;
     lastResult.first = true;
@@ -172,6 +174,10 @@ pair<bool, int> Implement(string s, queue<string> dividedStrings, int option = 1
 
         if(frontElement == "?"){
             dividedStrings.pop();
+
+            if(dividedStrings.size() <= 0){
+                break;
+            }
 
             string tempS = dividedStrings.front();
 
@@ -202,28 +208,39 @@ pair<bool, int> Implement(string s, queue<string> dividedStrings, int option = 1
 }
 
 int main(){
-    string s, patt;
-    cin >> s >> patt;
+    pair<string, string> inputValues[10];
+    inputValues[0].first = "abccba"; inputValues[0].second = "cba";
+    inputValues[1].first = "abccba"; inputValues[1].second = "b*b";
+    inputValues[2].first = "abccba"; inputValues[2].second = "c*c";
+    inputValues[3].first = "abccba"; inputValues[3].second = "*ab";
+    inputValues[4].first = "abccba"; inputValues[4].second = "ba*";
+    inputValues[5].first = "abccba"; inputValues[5].second = "a?c";
+    inputValues[6].first = "abccba"; inputValues[6].second = "?bc";
+    inputValues[7].first = "abccba"; inputValues[7].second = "ab?";
+    inputValues[8].first = "abccba"; inputValues[8].second = "a?b";
+    inputValues[9].first = "abccba"; inputValues[9].second = "bbb";
 
-    queue<string> dividedStrings;
-    dividedStrings = DivideString(patt);
+    for(int i = 0; i <= 9; i++){
+        queue<string> dividedStrings;
+        dividedStrings = DivideString(inputValues[i].second);
 
-    pair<bool, int> result1 = Implement(s, dividedStrings,  1);
+        pair<bool, int> result1 = Implement(inputValues[i].first, dividedStrings,  1);
 
-    if(result1.first){
-        cout<<" True"<<endl;
-    }else{
-        cout<<"False"<<endl;
-    }
+        cout << "Input string is " << inputValues[i].first << ", pattern is " << inputValues[i].second << endl;
 
-    cout << s << " " << patt<< endl;
+        if(result1.first){
+            cout<<"Brude force result is TRUE"<<endl;
+        }else{
+            cout<<"Brude force result is FALSE"<<endl;
+        }
 
-    pair<bool, int> result2 = Implement(s, dividedStrings, 2);
+        pair<bool, int> result2 = Implement(inputValues[i].first, dividedStrings, 2);
 
-    if(result2.first){
-        cout<<" True"<<endl;
-    }else{
-        cout<<"False"<<endl;
+        if(result2.first){
+            cout<<"Sunday algorithm result is TRUE"<<endl;
+        }else{
+            cout<<"Sunday algorithm result is FALSE"<<endl;
+        }
     }
 
     return 0;
