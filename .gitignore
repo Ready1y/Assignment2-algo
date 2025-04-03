@@ -1,3 +1,6 @@
+#tasks ignore
+*.tasks
+
 # vscode ignore 
 *.vscode
 

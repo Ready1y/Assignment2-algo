@@ -40,18 +40,18 @@ pair<bool, int> Sunday_match(string pattern, string inputString) {
     int pattern_length = pattern.size();
     int data_length = inputString.size();
 
-    if (pattern_length == 0) return result;
+    if(pattern_length == 0) return result;
 
     vector<int> shift_table(256, pattern_length);
 
-    for (int i = 0; i < pattern_length; i++) {
+    for(int i = 0; i < pattern_length; i++){
         shift_table[pattern[i]] = pattern_length - i;
     }
 
     int i = 0;
-    while (i <= data_length - pattern_length) {
+    while(i <= data_length - pattern_length){
         // Check for match
-        if (inputString.substr(i, pattern_length) == pattern) {
+        if(inputString.substr(i, pattern_length) == pattern){
             //cout<<"match at i=="<<i<<endl;
             result.first = true;
             result.second = i + pattern_length - 1;

@@ -1,0 +1,19 @@
+Task 1-3
+
+To complete this task, I used a version of the Rabin-Karp algorithm for 2D matrices. It has a very similar logic. First, the initial hash values are initialized, then we use a loop to go through the matrix and if we find hash matches, we additionally check them for collisions, and then run colRollingHash to further calculate the hash for the next rows
+
+This is implemented using the following functions:
+
+1) findPower - Function to find a ^ n & mod
+2) findHash - searches for a hash on a certain number of specified rows
+3) check - check when the hash is the same or if they are the same submatrices
+4) colRollingHash - runs the Rolling Hash algorithm to subtract the previous values and add a new one
+5) extractTopRightCorner - extracts a subarray of size K*K from the upper right corner of the matrix
+6) searchPattern - searches for patterns in the matrix, returns a vector of answers. 
+First, it initializes the required data, the dimensions of the matrix and the pattern, the maximum powers for the matrix and the pattern, the initial hash for the matrix, and the hash of the pattern. 
+Next, it calculates the hash value for the pattern, and runs two nested loops that calculate the submatrix hash - then compares it with the pattern hash, if they are the same, then runs the CHECK function, then if we have not reached the end of the matrix, run colRollingHash to initialize the hashes in another line.
+
+The overall time complexity is dominated by the searchPattern function, which is:
+O(N * M * K)
+
+The second implementation will be faster than this one, since in the worst case O(N * M * K)

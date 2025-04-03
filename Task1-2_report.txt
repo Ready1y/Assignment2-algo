@@ -1,0 +1,17 @@
+Task 1-2
+
+To complete this task, I took 2 ready-made functions from Task 1-1, namely Brute Force and Sunday. Since the main idea of the Sunday algorithm is related to the length of the pattern we are looking for, it is not possible to improve this algorithm directly. There are options for improving the comparison function, but they almost always boil down to using some other search algorithm. Brute force can be improved directly by adding many conditions inside it. But I decided to go the other way and create 2 auxiliary functions for which both functions (Brute force and Sunday) will work without any changes in them.
+
+1) DivideString is the main function in this implementation that will help to perform the wildcards-related expansion. Its main goal is to divide our pattern into pieces that our algorithms can find in the string. To do this, we go through the pattern and 
+- if we come across a "*" then the part that has already passed is sent to the queue, and we continue to go further along the string
+- if we come across a "?" then the part that has already passed is sent to the queue, and a separate "? " and we continue to go further along the string
+-if string ended we passes our string to the queue 
+
+P.s if "*" or "?" are encountered twice in one pass, then the part from the previous wildcard to this one is sent to the queue
+
+2) Implement - this function implements the use of our algorithms on an already split string.
+We take an element from the queue until either we have no more elements (pattern found) or the string is over (pattern not found). 
+When we have taken an item from the queue, we run our algorithm that will find the first match of this pattern in the string, and return the index of the last passed item, in the next iteration our pattern (which we took from the queue again) will not go from the beginning of the string but from the index of the last passed item. If we come across “?” from the queue, then we simply increase the index of the last element by 1
+
+Average time complexity for Brute-force method is O(M * (N * M))
+Average time complexity for Sunday method is O(M * (N/M))
